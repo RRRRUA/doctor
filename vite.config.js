@@ -17,6 +17,7 @@ export default defineConfig({
     proxy:{
       '/api': {   //  拦截以 /api 开头的接口
         target: 'http://localhost:8080',//设置你调用的接口域名和端口号 别忘了加http
+     /*   target:'http://127.0.0.1:4523/m2/4705170-4357257-default', */
         changeOrigin: true,    //这里true表示实现跨域
         ws:true,
         secure: false, // 如果是https接口，需要配置这个参数

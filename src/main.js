@@ -6,9 +6,11 @@ import router from './router'
 
 import axios from 'axios'
 
-import 'font-awesome/css/font-awesome.min.css';
+
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
+
+  
 import { getLocalStorage, getSessionStorage, removeLocalStorage, setSessionStorage } from "./common.js";
 const app = createApp(App)
 
