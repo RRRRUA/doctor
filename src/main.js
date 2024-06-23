@@ -18,42 +18,42 @@ app.use(router)
 app.use(ElementPlus)
 app.provide('$axios',axios)
 
-// axios.defaults.timeout = 15000;
+axios.defaults.timeout = 15000;
 
-// // 添加请求拦截器，在请求头中加token
-// axios.interceptors.request.use(
-//     config => {
-//       if (getLocalStorage('token')) {
-//         console.log('Nihao');
-//         config.headers.Authorization = getLocalStorage('token');
-//       }
-//       return config;
-//     },
-//     error => {
-//       return Promise.reject(error);
-//     });
+// 添加请求拦截器，在请求头中加token
+axios.interceptors.request.use(
+    config => {
+      if (getLocalStorage('token')) {
+        console.log('Nihao');
+        config.headers.Authorization = getLocalStorage('token');
+      }
+      return config;
+    },
+    error => {
+      return Promise.reject(error);
+    });
 
-// // 添加响应拦截器
-// axios.interceptors.response.use(res=>{
-//   let token=getSessionStorage('token');
-//   let new_token=res.headers.authorization;
-//   if(new_token===token)
-//     {
-//       setSessionStorage('token',new_token);
-//     }   
-//   if(res.data.code === 100)
-//         { 
+// 添加响应拦截器
+axios.interceptors.response.use(res=>{
+  let token=getSessionStorage('token');
+  let new_token=res.headers.authorization;
+  if(new_token===token)
+    {
+      setSessionStorage('token',new_token);
+    }   
+  if(res.data.code === 100)
+        { 
          
-//             console.log('NIHAO');
-//             router.replace('/');
-//             //所有
-//             removeLocalStorage('token');
-//             sessionStorage.clear();
+            console.log('NIHAO');
+            router.replace('/');
+            //所有
+            removeLocalStorage('token');
+            sessionStorage.clear();
 
 
-//         }
-//         return res;
-// })
+        }
+        return res;
+})
 
 export default axios;
 

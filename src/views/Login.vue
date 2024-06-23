@@ -16,7 +16,7 @@
             </el-input>
           </el-form-item>
           <el-form-item v-if="loginType == 'password'" label="密码">
-            <el-input v-model="form.password" placeholder="请输入密码">
+            <el-input type="password" v-model="form.password" placeholder="请输入密码">
               <template #prefix>
                 <i class="fa fa-lock"></i>
               </template>
@@ -67,7 +67,7 @@
                 </template>
                 <template #suffix>
 
-                  <span v-if="!isCountingDown" @click="sendCode" style="cursor: pointer;color: darkkhaki;">获取验证码</span>
+                  <span v-if="!isCountingDown" @click="sendCodeInForget" style="cursor: pointer;color: darkkhaki;">获取验证码</span>
                   <span v-else style="color:brown;">{{ countdown }} 秒后重新发送</span>
                  
                 </template>
@@ -77,11 +77,11 @@
       
           </el-form-item>
           <el-form-item label="新密码">
-              <el-input v-model="formForget.password" placeholder="请输入新密码"></el-input>
+              <el-input type="password" v-model="formForget.password" placeholder="请输入新密码"></el-input>
              
              </el-form-item>
              <el-form-item label="确认密码">
-              <el-input v-model="formForget.repeatPassword" placeholder="请确认密码"></el-input>
+              <el-input type="password" v-model="formForget.repeatPassword" placeholder="请确认密码"></el-input>
              
              </el-form-item>
              <el-form-item > 
@@ -89,9 +89,9 @@
              </el-form-item>
         </div>
         <div style="text-align: auto; ">
-          <span v-if="formType == 'login'" @click="formType = 'forget'"
+          <span v-if="formType == 'login'" @click="forgetPassword"
             style="color:darkorange; font-size: 12px; ">忘记密码？</span>
-          <span v-else @click="formType = 'login'" style="color:darkorange; font-size: 12px; ">返回登录</span>
+          <span v-else @click="returnLogin" style="color:darkorange; font-size: 12px; ">返回登录</span>
         </div>
       </el-form>
       <template #footer>熙康-版权所有</template>
@@ -117,12 +117,25 @@ const form = reactive({
   password: '',
   code: ''
 })
+
 const formForget = reactive({
   docId: '',
   code: '',
   password: '',
   repeatPassword: ''
 })
+const forgetPassword = () => {
+  formType.value = 'forget'
+  form.docIdOrCode = ''
+  form.code = ''
+  form.password = ''
+}
+const returnLogin = () => {
+  formType.value = 'login'
+  formForget.docId = ''
+  formForget.code = ''
+  formForget.password = ''
+}
 //发送验证码的倒计时
 const startCountdown = () => {
   if (isCountingDown.value) return; // 如果已经在倒计时中，则不做任何操作
@@ -195,7 +208,8 @@ const onForgetSubmit = () => {
   })
 }
 const sendCode = () => {
-  if (form.docIdOrCode.trim() == '') {
+
+  if (form.docIdOrCode.trim() == ''){
     ElMessage(
       {
         message: "账号不能为空",
@@ -237,6 +251,50 @@ const sendCode = () => {
   )
 
 }
+const sendCodeInForget = () => {
+
+if (formForget.docId.trim() == ''){
+  ElMessage(
+    {
+      message: "账号不能为空",
+      type: "error"
+    })
+  return
+}
+axios(
+  {
+    method: 'get',
+    url: '/api/doctor/sendCode/' + formForget.docId.trim(),
+  }
+).then(res => {
+  if (res.data.code == 1) {
+    startCountdown();
+    ElMessage(
+      {
+        message: "验证码发送成功",
+        type: "success"
+      }
+    )
+  } else {
+    ElMessage(
+      {
+        message: res.data.message,
+        type: "error"
+      }
+    )
+  }
+}
+).catch(err => {
+  ElMessage(
+    {
+      message: err.message,
+      type: "error"
+    }
+  )
+}
+)
+
+}
 const onSubmit = () => {
   if (loginType.value == 'password')
     loginByPassword()
@@ -261,8 +319,8 @@ const loginByCode = () => {
       url: '/api/doctor/loginByCode',
       // url:'api/186812056',
       data: {
-        docIdOrCode: form.docIdOrCode,
-        password: form.password
+        docId: form.docIdOrCode,
+        code: form.code
       }
     }).then(res => {
       if (res.data.code == 1) {
