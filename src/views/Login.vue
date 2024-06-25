@@ -415,7 +415,7 @@ const loginByPassword = () => {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: url(../assets/img/tree-736885__340.jpg);
+  background-image: url(../assets/img/R-C.png);
   background-size: cover;
 }
 

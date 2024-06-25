@@ -10,7 +10,7 @@
 
             <el-container>
                 <el-aside width="300px">
-                    <el-descriptions :model="info" class="margin-top" title="预约客户信息" :column="1" :size="large" border>
+                    <el-descriptions v-model="data.order" class="margin-top" title="预约客户信息" :column="1" :size="large" border>
                         <el-descriptions-item>
                             <template #label>
                                 <div class="cell-item">
@@ -20,7 +20,7 @@
                                     预约编号
                                 </div>
                             </template>
-                            {{ info.id }}
+                            {{ data.order.orderId }}
                         </el-descriptions-item>
                         <el-descriptions-item>
                             <template #label>
@@ -31,7 +31,7 @@
                                     手机号码
                                 </div>
                             </template>
-                            {{ info.phone }}
+                            {{ data.order.userId }}
                         </el-descriptions-item>
 
                         <el-descriptions-item>
@@ -43,7 +43,7 @@
                                     真实姓名
                                 </div>
                             </template>
-                            {{ info.name }}
+                            {{ data.order.realName }}
                         </el-descriptions-item>
 
                         <el-descriptions-item>
@@ -55,7 +55,7 @@
                                     性别
                                 </div>
                             </template>
-                            {{ info.gender }}
+                            {{ data.order.sex }}
                         </el-descriptions-item>
 
 
@@ -68,7 +68,7 @@
                                     套餐类型
                                 </div>
                             </template>
-                            {{ info.type }}
+                            {{ data.order.smName }}
                         </el-descriptions-item>
 
                         <el-descriptions-item>
@@ -80,7 +80,7 @@
                                     体检时间
                                 </div>
                             </template>
-                            {{ info.date }}
+                            {{ data.order.orderDate }}
                         </el-descriptions-item>
                     </el-descriptions>
                     <br>
@@ -239,16 +239,27 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const jsonData = route.query.data;
+const data = reactive( {order:null} )
+    
+    // 如果 jsonData 存在，尝试将其反序列化为对象
+    if (jsonData) {
+      try {
+     data.order = reactive(JSON.parse(jsonData));
+       
+           
+    // 使用反序列化的对象进行操作
+     
+      } catch (e) {
+        console.error('解析 JSON 时发生错误:', e);
+      }
+    }
 
 // do not use same name with ref
-const info = reactive({
-    id: 1,
-    phone: '12345678901',
-    name: '东方',
-    gender: '女',
-    type: '女士套餐',
-    date: '2021-1-01',
-})
+
 const form1 = reactive({
     name1: '',
     name2: '',
