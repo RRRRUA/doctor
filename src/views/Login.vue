@@ -220,8 +220,9 @@ const sendCode = () => {
   axios(
     {
       method: 'get',
-      url: '/api/doctor/sendCode/' + form.docIdOrCode.trim(),
+      url: '/api/doctor/sendCode' ,
       params:{
+       docId: form.docIdOrCode.trim(),
         type: 2
       }
     }
@@ -267,8 +268,9 @@ if (formForget.docId.trim() == ''){
 axios(
   {
     method: 'get',
-    url: '/api/doctor/sendCode/' + formForget.docId.trim(),
+    url: '/api/doctor/sendCode',
     params:{
+        docId: formForget.docId.trim(),
         type: 1
       }
   }

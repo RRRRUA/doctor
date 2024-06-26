@@ -92,10 +92,11 @@
 
 <script setup>
 import axios from 'axios';
-import { getSessionStorage } from '../common.js';
+import { getSessionStorage, setSessionStorage } from '../common.js';
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import router from '@/router/index.js';
+
 
 // do not use same name with ref
 const form = reactive({
@@ -235,7 +236,7 @@ const find = () => {
         tableData.value = res.data.data.list
         
         page1.total = res.data.data.total
-        page1.currentPage = res.data.data.currentPage
+        // page1.currentPage = res.data.data.currentPage
         page1.totalPage = res.data.data.totalPage
 
         ElMessage(
@@ -274,13 +275,15 @@ const resize = () => {
     form.resource = ''
 }
 const handle = (data) => {
-    const jsonData = JSON.stringify(data);
+    // const jsonData = JSON.stringify(data);
 
-// 将 JSON 字符串作为查询参数传递
-router.push({
-  path: '/report',
-  query: { data: jsonData }
-});
+// // 将 JSON 字符串作为查询参数传递
+// router.push({
+//   path: '/report',
+//   params: { data: data }
+// });
+    setSessionStorage('reportData',data)
+    router.push('/report')
 }
 find()
 </script>
