@@ -10,12 +10,17 @@ import axios from 'axios'
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 
+import 'echarts'
+import ECharts from 'vue-echarts'
+
+
   
 import { getLocalStorage, getSessionStorage, removeLocalStorage, setSessionStorage } from "./common.js";
 const app = createApp(App)
 
 app.use(router)
 app.use(ElementPlus)
+app.component('v-chart', ECharts)
 app.provide('$axios',axios)
 
 axios.defaults.timeout = 15000;

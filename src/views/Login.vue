@@ -94,19 +94,26 @@
           <span v-else @click="returnLogin" style="color:darkorange; font-size: 12px; ">返回登录</span>
         </div>
       </el-form>
+      
+
       <template #footer>熙康-版权所有</template>
     </el-card>
   </div>
+
 </template>
 
 <script setup>
 
+//导入echarts的柱状图
 
 import { ref, reactive } from 'vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import router from '@/router';
 import { setLocalStorage, setSessionStorage } from '@/common';
+
+
+
 const formType = ref('login') // 表单类型
 const countdown = ref(60); // 验证码倒计时秒数
 //是否在倒计时
