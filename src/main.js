@@ -7,7 +7,7 @@ import router from './router'
 import axios from 'axios'
 
 
-import ElementPlus from 'element-plus';
+import ElementPlus, { ElMessage } from 'element-plus';
 import 'element-plus/dist/index.css';
 
 import 'echarts'
@@ -48,17 +48,17 @@ axios.interceptors.response.use(res=>{
     }   
   if(res.data.code === 100)
         { 
-         
+          removeLocalStorage('token');
             console.log('NIHAO');
             router.replace('/');
             //所有
-            removeLocalStorage('token');
+           ElMessage.error('登录失效');
             sessionStorage.clear();
-
-
+        
         }
-        return res;
-})
+       return res;
+},
+)
 
 export default axios;
 

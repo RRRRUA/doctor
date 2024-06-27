@@ -100,12 +100,17 @@
  -->
 <el-dialog
     v-model="chart"
-    title="Tips"
-    width="500"
+    title=""
+    style="width: 500;
+    " 
     @close="closeChart"
   >
+  <div  style="display: flex;
+    justify-content: center;
+    align-items: center;">
   <v-chart v-if="chart1" id="orderChart" :option="orderTable" style="width: 400px;height: 400px;"></v-chart>
   <v-chart v-if="chart2" id="mealChart" :option="mealTable" style="width: 400px;height: 400px;"></v-chart>
+</div>
   <template #footer>
       <div class="dialog-footer">
         <el-button @click="closeChart">Cancel</el-button>
@@ -207,8 +212,16 @@ const initMealChart=()=>
 {
     myChart1.value = echarts.init(document.getElementById('mealChart')); // 假设你的图表容器ID是main
     const mealTable={
+        title: {
+            text: '7天内套餐销量图', // 这里填写您想要的标题文本
+            left: 'center', // 标题水平居中
+            textStyle: {
+                fontSize: 22, // 标题字体大小
+            },
+        },
         legend: {
     data: mealData.value.map(item => item.name), // 设置图例名称
+    top: 30, // 图例距离顶部距离
   },
   xAxis: {
     data: mealData.value[0].data.map(item => item.date), // 设置x轴数据
@@ -219,22 +232,15 @@ const initMealChart=()=>
     data: outerItem.data.map(data => data.count), // 假设outerItem.details是一个数组，每个对象有count属性
     type: 'line', // 图表类型，折线图
     stack: 'x' // 堆叠类型，x轴方向堆叠
-}))
-    
-   /* [
-    {
-        name: '系列1', // 系列名称，显示在图例中
-      data: [10, 22, 28, 43, 49],
-      type: 'line',
-      stack: 'x'
-    },
-    {
-        name: '系列2', // 系列名称，显示在图例中
-      data: [5, 4, 3, 5, 10],
-      type: 'line',
-      stack: 'x'
-    }
-  ] */
+})),
+ // 新增或调整grid配置
+ grid: {
+            top: '20%', // 调整此值以增加标题下方至图表内容的距离，例如设置为20%或具体像素值
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true,
+        },
 };
     myChart1.value.setOption(mealTable);
 }
@@ -244,7 +250,9 @@ const initOrderChart = () => {
   // 确保orderData已经加载
   myChart.value = echarts.init(document.getElementById('orderChart')); // 假设你的图表容器ID是main
  const orderTable = {
-    title: { text: "30天内订单预约趋势" },
+    title: { text: "30天内订单预约趋势" ,
+      left: 'center', // 标题水平居中
+    },
     tooltip: {},
     xAxis: {
       type: 'category',

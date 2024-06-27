@@ -91,8 +91,8 @@
 
 
 
-                <el-main>
-                    <div class="demo-collapse">
+                <el-main style="height: 90vh; overflow-y: auto;">
+                    <div class="demo-collapse" >
                         <el-collapse v-model="activeNames" @change="handleChange()">
 
                             <el-collapse-item v-for="(item, index) in cireportList" :key="index" :title="item.ciName"
@@ -101,10 +101,10 @@
                                 <div style="display: flex; flex-wrap: wrap; width: 100%;">
                                     <el-form :inline="true"
                                         v-for="(item1, index1) in cireportDetaileList.data[index].value"
-                                        class="demo-form-inline" style="width: auto; display: flex; flex-wrap: nowrap;">
+                                        class="demo-form-inline" style="width:auto; display: flex; flex-wrap: nowrap;">
                                         <span v-if="item1.isError == 1" :class="'yi-icon'">异</span>
                                         <el-form-item :label=item1.name style="width: auto;">
-                                            <el-input style="width: auto;" :class="{ 'disabled-input': rescourse }"
+                                            <el-input style="max-width: 150px" :class="{ 'disabled-input': rescourse }"
                                                 v-model="item1.value" clearable />
                                             {{ item1.unit }} 正常值范围:{{ item1.normalValueString }}
                                         </el-form-item>
@@ -209,7 +209,16 @@ const handleChange = () => {
 
         const lastExpandedId = activeNames.value[activeNames.value.length - 1];
 
-        axios
+      getCheckDetailItem(lastExpandedId);
+
+
+    }
+    activeNamesLength.value = activeNames.value.length;
+
+};
+const getCheckDetailItem=(lastExpandedId)=>
+{
+    axios
             (
                 {
                     method: 'post',
@@ -237,12 +246,7 @@ const handleChange = () => {
             ).catch(err => {
                 console.log(err)
             })
-
-
-    }
-    activeNamesLength.value = activeNames.value.length;
-
-};
+}
 const overAllReset = () => {
     form1.content = '';
     form1.title = '';
@@ -507,9 +511,10 @@ const handleClick = (index) => {
 
     }).then(res => {
         if (res.data.code == 1) {
+            getCheckDetailItem(index);
             ElMessage(
                 {
-                    message: res.data.message,
+                    message: '保存成功',
                     type: "success"
                 }
             )
@@ -576,7 +581,7 @@ const form1 = reactive({
 }
 
 .el-header {
-    height: 80px;
+    height: 10vh;
     /* 弹性布局 */
     display: flex;
     /* 水平方向分局两侧 */
@@ -594,7 +599,7 @@ const form1 = reactive({
     background-color: #d4dae2;
     box-sizing: border-box;
     width: 20%;
-    height: 100%;
+    height: 90vh;
 }
 
 .el-descriptions {
@@ -613,6 +618,7 @@ const form1 = reactive({
 .demo-collapse {
     width: 100%;
     /* 确保容器充分利用父元素宽度 */
+ 
 }
 
 /* CSS模拟禁用样式 */
